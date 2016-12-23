@@ -10,7 +10,7 @@
 
     ```
       jn() {
-        docker run -v $PWD:/home/jovyan/work --rm -it -p 8888:8888 jupyter/scipy-notebook
+        docker run -v $PWD:/home/jovyan/work --rm -it -p 8888:8888 waieez/keras-notebook
       }
     ```
 4. cd into this directory and type jn or use the entire docker run command above to launch juptyer notebook in a container. The first time you run this it will pull the image from [Dockerhub](https://hub.docker.com/r/jupyter/)
