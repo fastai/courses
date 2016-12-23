@@ -13,8 +13,8 @@ mkdir downloads
 cd downloads
 wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh
 bash Anaconda2-4.2.0-Linux-x86_64.sh -b
-echo 'export PATH="$HOME/anaconda2/bin:$PATH"' >> ~/.bashrc
-export PATH="$HOME/anaconda2/bin:$PATH"
+echo 'export PATH="/usr/local/cuda/bin:$HOME/anaconda2/bin:$PATH"' >> ~/.bashrc
+export PATH="/usr/local/cuda/bin:$HOME/anaconda2/bin:$PATH"
 conda install -y bcolz
 conda upgrade -y --all
 
