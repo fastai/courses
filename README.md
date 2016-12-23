@@ -10,7 +10,7 @@
 
     ```
       jn() {
-        docker run -v $PWD:/home/jovyan/work --rm -it -p 8888:8888 waieez/keras-notebook
+        docker run --rm -it -v $PWD:/src -v $PWD/data:/data -p 8888:8888 -e "KERAS_BACKEND=tensorflow" waieez/keras-notebook:latest
       }
     ```
 4. cd into this directory and type jn or use the entire docker run command above to launch juptyer notebook in a container. The first time you run this it will pull the image from [Dockerhub](https://hub.docker.com/r/jupyter/)
