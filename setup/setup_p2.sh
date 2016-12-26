@@ -1,4 +1,4 @@
-set -x
+# set -x # Use for debug mode
 set -o igncr
 export SHELLOPTS
 
