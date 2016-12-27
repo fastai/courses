@@ -1,7 +1,4 @@
 # set -x # debug mode
-set -o igncr
-export SHELLOPTS
-
 export vpcId=`aws ec2 create-vpc --cidr-block 10.0.0.0/28 --query 'Vpc.VpcId' --output text`
 # export vpcId=${tmp:0:`expr ${#tmp} - 1`}
 
