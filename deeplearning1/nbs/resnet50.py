@@ -80,7 +80,7 @@ class Resnet50():
             x = AveragePooling2D((7, 7), name='avg_pool')(x)
             x = Flatten()(x)
             x = Dense(1000, activation='softmax', name='fc1000')(x)
-            fname = 'rn50.h5'
+            fname = 'resnet50.h5'
         else:
             fname = 'resnet_nt.h5'
 
