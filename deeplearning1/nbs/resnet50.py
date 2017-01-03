@@ -80,7 +80,7 @@ class Resnet50():
             x = AveragePooling2D((7, 7), name='avg_pool')(x)
             x = Flatten()(x)
             x = Dense(1000, activation='softmax', name='fc1000')(x)
-            fname = 'rn50.h5'
+            fname = 'resnet50.h5'
         else:
             fname = 'resnet_nt.h5'
 
@@ -90,9 +90,9 @@ class Resnet50():
         self.model.load_weights(get_file(fname, self.FILE_PATH+fname, cache_subdir='models'))
 
 
-    def get_batches(self, path, gen=image.ImageDataGenerator(), shuffle=True, batch_size=8):
+    def get_batches(self, path, gen=image.ImageDataGenerator(),class_mode='categorical', shuffle=True, batch_size=8):
         return gen.flow_from_directory(path, target_size=(224,224),
-                class_mode='categorical', shuffle=shuffle, batch_size=batch_size)
+                class_mode=class_mode, shuffle=shuffle, batch_size=batch_size)
 
 
     def finetune(self, batches):
@@ -108,3 +108,6 @@ class Resnet50():
         self.model.fit_generator(batches, samples_per_epoch=batches.nb_sample, nb_epoch=nb_epoch,
                 validation_data=val_batches, nb_val_samples=val_batches.nb_sample)
 
+    def test(self, path, batch_size=8):
+        test_batches = self.get_batches(path, shuffle=False, batch_size=batch_size, class_mode=None)
+        return test_batches, self.model.predict_generator(test_batches, test_batches.nb_sample)
