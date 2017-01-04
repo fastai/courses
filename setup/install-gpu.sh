@@ -25,11 +25,8 @@ echo "[global]
 device = gpu
 floatX = float32
 
-[lib]
-cnmem=.75
-
 [cuda]
-root = /usr/local/cuda" > ~/.theanorc1
+root = /usr/local/cuda" > ~/.theanorc
 
 pip install keras
 mkdir ~/.keras
