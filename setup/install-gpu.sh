@@ -1,3 +1,5 @@
+# This script is designed to work with ubuntu 16.04 LTS
+
 sudo apt-get update && apt-get --assume-yes upgrade
 sudo apt-get --assume-yes install tmux build-essential gcc g++ make binutils
 sudo apt-get --assume-yes install software-properties-common
@@ -13,15 +15,18 @@ mkdir downloads
 cd downloads
 wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh
 bash Anaconda2-4.2.0-Linux-x86_64.sh -b
-echo 'export PATH="/home/ubuntu/anaconda2/bin:$PATH"' >> ~/.bashrc
-export PATH="/home/ubuntu/anaconda2/bin:$PATH"
+echo "export PATH=\"$HOME/anaconda2/bin:\$PATH\"" >> ~/.bashrc
+export PATH="$HOME/anaconda2/bin:$PATH"
 conda install -y bcolz
 conda upgrade -y --all
 
 pip install theano
 echo "[global]
 device = gpu
-floatX = float32" > ~/.theanorc
+floatX = float32
+
+[cuda]
+root = /usr/local/cuda" > ~/.theanorc
 
 pip install keras
 mkdir ~/.keras
@@ -40,8 +45,7 @@ sudo cp include/* /usr/local/cuda/include/
 
 jupyter notebook --generate-config
 jupass=`python -c "from notebook.auth import passwd; print(passwd())"`
-echo "c.NotebookApp.password = u'"$jupass"'" >> .jupyter/jupyter_notebook_config.py
+echo "c.NotebookApp.password = u'"$jupass"'" >> $HOME/.jupyter/jupyter_notebook_config.py
 echo "c.NotebookApp.ip = '*'
-c.NotebookApp.open_browser = False" >> .jupyter/jupyter_notebook_config.py
+c.NotebookApp.open_browser = False" >> $HOME/.jupyter/jupyter_notebook_config.py
 mkdir nbs
-
