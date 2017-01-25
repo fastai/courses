@@ -64,7 +64,7 @@ then
 fi
 
 export instanceId=`aws ec2 run-instances --image-id $ami --count 1 --instance-type t2.xlarge --key-name aws-key-$name --security-group-ids $securityGroupId --subnet-id $subnetId --associate-public-ip-address --block-device-mapping "[ { \"DeviceName\": \"/dev/sda1\", \"Ebs\": { \"VolumeSize\": 128, \"VolumeType\": \"gp2\" } } ]" --query 'Instances[0].InstanceId' --output text`
-aws ec2 create-tags --resources $instanceId --tags --tags Key=Name,Value=$name-gpu-machine
+aws ec2 create-tags --resources $instanceId --tags --tags Key=Name,Value=$name-cpu-machine
 export allocAddr=`aws ec2 allocate-address --domain vpc --query 'AllocationId' --output text`
 
 echo Waiting for instance start...
