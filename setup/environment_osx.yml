@@ -1,18 +1,18 @@
-name: root
+name: fastai_py27
 channels:
-- !!python/unicode
-  'anaconda'
-- !!python/unicode
-  'defaults'
+# - !!python/unicode
+  # 'anaconda'
+# - !!python/unicode
+  # 'defaults'
 dependencies:
-- !!python/unicode
-  'anaconda=custom=py27_0'
-- !!python/unicode
-  'anaconda-navigator=1.2.3=py27_0'
-- !!python/unicode
-  'conda=4.3.4=py27_0'
-- !!python/unicode
-  'conda-env=2.6.0=0'
+# - !!python/unicode
+#   'anaconda=custom=py27_0'
+# - !!python/unicode
+#   'anaconda-navigator=1.2.3=py27_0'
+# - !!python/unicode
+#   'conda=4.3.4=py27_0'
+# - !!python/unicode
+#   'conda-env=2.6.0=0'
 - !!python/unicode
   'graphviz=2.38.0=4'
 - !!python/unicode
@@ -93,8 +93,8 @@ dependencies:
   'clyent=1.2.2=py27_0'
 - !!python/unicode
   'colorama=0.3.7=py27_0'
-- !!python/unicode
-  'conda-build=2.0.6=py27_0'
+# - !!python/unicode
+#   'conda-build=2.0.6=py27_0'
 - !!python/unicode
   'configobj=5.0.6=py27_0'
 - !!python/unicode
@@ -218,8 +218,6 @@ dependencies:
 - !!python/unicode
   'markupsafe=0.23=py27_2'
 - !!python/unicode
-  'mistune=0.7.3=py27_0'
-- !!python/unicode
   'mkl=11.3.3=0'
 - !!python/unicode
   'mkl-service=1.1.2=py27_2'
@@ -227,12 +225,12 @@ dependencies:
   'mpmath=0.19=py27_1'
 - !!python/unicode
   'multipledispatch=0.4.8=py27_0'
-- !!python/unicode
-  'nb_anacondacloud=1.2.0=py27_0'
-- !!python/unicode
-  'nb_conda=2.0.0=py27_0'
-- !!python/unicode
-  'nb_conda_kernels=2.0.0=py27_0'
+# - !!python/unicode
+#   'nb_anacondacloud=1.2.0=py27_0'
+# - !!python/unicode
+#   'nb_conda=2.0.0=py27_0'
+# - !!python/unicode
+#   'nb_conda_kernels=2.0.0=py27_0'
 - !!python/unicode
   'nbconvert=4.2.0=py27_0'
 - !!python/unicode
@@ -264,8 +262,6 @@ dependencies:
 - !!python/unicode
   'partd=0.3.6=py27_0'
 - !!python/unicode
-  'patchelf=0.9=0'
-- !!python/unicode
   'path.py=8.2.1=py27_0'
 - !!python/unicode
   'pathlib2=2.1.0=py27_0'
@@ -280,8 +276,6 @@ dependencies:
 - !!python/unicode
   'pip=8.1.2=py27_0'
 - !!python/unicode
-  'pixman=0.32.6=0'
-- !!python/unicode
   'pkginfo=1.3.2=py27_0'
 - !!python/unicode
   'ply=3.9=py27_0'
@@ -295,8 +289,6 @@ dependencies:
   'py=1.4.31=py27_0'
 - !!python/unicode
   'pyasn1=0.1.9=py27_0'
-- !!python/unicode
-  'pycairo=1.10.0=py27_0'
 - !!python/unicode
   'pycosat=0.6.1=py27_1'
 - !!python/unicode
@@ -404,8 +396,6 @@ dependencies:
 - !!python/unicode
   'yaml=0.1.6=0'
 - !!python/unicode
-  'zeromq=4.1.4=0'
-- !!python/unicode
   'zlib=1.2.8=3'
 - pip:
   - backports-abc==0.4
@@ -424,15 +414,15 @@ dependencies:
   - keras==1.1.0
   - mechanicalsoup==0.6.0
   - nb-anacondacloud==1.2.0
-  - nb-conda==2.0.0
-  - nb-conda-kernels==2.0.0
+  # - nb-conda==2.0.0
+  # - nb-conda-kernels==2.0.0
   - pbr==1.10.0
   - prettytable==0.7.2
   - prompt-toolkit==1.0.3
-  - ruamel-yaml-==VERSION
+  # - ruamel-yaml-==VERSION
   - stevedore==1.19.1
   - tables==3.2.3.1
   - theano==0.8.2
   - utils==0.9.0
-prefix: /home/ubuntu/anaconda2
+prefix: /Users/matthew.negrin/anaconda2
 
