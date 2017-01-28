@@ -26,8 +26,23 @@ class adjusted_vgg():
     def __init__(self):
         self.FILE_PATH = "http://www.platform.ai/models/"
 
-    def create(self, conv_layers):
+    def create_conv_model(self, conv_layers):
         model = self.model = Sequential(conv_layers)
+
+    def create_fc_model(self, fc_layers, train_features):
+        fc_model = self.fc_model = Sequential()
+        fc_model = Sequential()
+        fc_model.add(MaxPooling2D(input_shape=train_features.shape[1:]))
+        fc_model.add(Flatten())
+        fc_model.add(Dense(4096, activation='relu'))
+        fc_model.add(Dropout(0.))
+#        fc_model.add(BatchNormalization())
+        fc_model.add(Dense(4096, activation='relu'))
+        fc_model.add(Dropout(0.))
+#        fc_model.add(BatchNormalization())
+        fc_model.add(Dense(2, activation='softmax'))
+        for l1,l2 in zip(fc_model.layers, fc_layers): l1.set_weights(proc_wgts(l2))
+        fc_model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
 
     def mnn_batches(self, file_path, batch_size, train=True, class_mode='categorical', shuffle=False):
         if train:
