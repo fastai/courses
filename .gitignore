@@ -6,6 +6,7 @@ _site/
 *.pyc
 *.h5
 *.jpg
+*.blp
 ai_aliases.sh
 fast-ai-commands.txt
 fast-ai-remove.sh
