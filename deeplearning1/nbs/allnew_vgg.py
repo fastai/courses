@@ -1,4 +1,4 @@
-import os, json
+import os, json, sys
 import numpy as np
 from keras.models import Sequential
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
@@ -16,32 +16,39 @@ def vgg_preprocess(x):
     x = x - vgg_mean
     return x[:, ::-1] # reverse axis rgb->bgr
 
-def proc_wgts(layer): return [o/2 for o in layer.get_weights()]
+# def proc_wgts(layer): return [o/2 for o in layer.get_weights()]
+
+def proc_wgts(layer, prev_p, new_p):
+    scal = (1-prev_p)/(1-new_p)
+    return [weight*scal for weight in layer.get_weights()]
 
 class adjusted_vgg():
     """Building a model off of a set of input layers working from there."""
-    def __int__(self):
-        self.create()
-        
     def __init__(self):
         self.FILE_PATH = "http://www.platform.ai/models/"
 
     def create_conv_model(self, conv_layers):
         model = self.model = Sequential(conv_layers)
 
-    def create_fc_model(self, fc_layers, train_features):
+    def create_fc_model(self, train_features, p):
         fc_model = self.fc_model = Sequential()
-        fc_model = Sequential()
         fc_model.add(MaxPooling2D(input_shape=train_features.shape[1:]))
         fc_model.add(Flatten())
         fc_model.add(Dense(4096, activation='relu'))
-        fc_model.add(Dropout(0.))
-#        fc_model.add(BatchNormalization())
+        fc_model.add(Dropout(p))
+        fc_model.add(BatchNormalization())
         fc_model.add(Dense(4096, activation='relu'))
-        fc_model.add(Dropout(0.))
-#        fc_model.add(BatchNormalization())
+        fc_model.add(Dropout(p))
+        fc_model.add(BatchNormalization())
         fc_model.add(Dense(2, activation='softmax'))
-        for l1,l2 in zip(fc_model.layers, fc_layers): l1.set_weights(proc_wgts(l2))
+    
+    def add_fc_weights(self, fc_layers, p):
+        fc_model = self.fc_model
+        for l in fc_model.layers: 
+            if type(l)==Dense: l.set_weights(proc_wgts(l, 1-p, p))
+
+    def model_compiler(self, opt, loss='categorical_crossentropy', metrics=['accuracy']):
+        fc_model = self.fc_model
         fc_model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
 
     def mnn_batches(self, file_path, batch_size, train=True, class_mode='categorical', shuffle=False):
@@ -56,8 +63,8 @@ class adjusted_vgg():
         fc_model = Sequential()
         fc_model.add(MaxPooling2D(input_shape=input_shape))
         fc_model.add(Flatten())
-        fc_model.add(Dense(4096, activation='relu'))
-        fc_model.add(Dropout(0.))
+        # fc_model.add(Dense(4096, activation='relu'))
+        # fc_model.add(Dropout(0.))
 #        fc_model.add(BatchNormalization())
         fc_model.add(Dense(4096, activation='relu'))
         fc_model.add(Dropout(0.))
