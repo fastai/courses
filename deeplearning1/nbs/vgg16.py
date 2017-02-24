@@ -65,7 +65,7 @@ class Vgg16():
 
     def create(self):
         model = self.model = Sequential()
-        model.add(Lambda(vgg_preprocess, input_shape=(3,224,224)))
+        model.add(Lambda(vgg_preprocess, input_shape=(3,224,224), output_shape=(3,224,224)))
 
         self.ConvBlock(2, 64)
         self.ConvBlock(2, 128)
