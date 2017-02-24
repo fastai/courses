@@ -6,7 +6,6 @@ import numpy as np
 from scipy import misc, ndimage
 from scipy.ndimage.interpolation import zoom
 
-from keras.utils.data_utils import get_file
 from keras import backend as K
 from keras.layers.normalization import BatchNormalization
 from keras.utils.data_utils import get_file
@@ -28,8 +27,9 @@ class Vgg16():
     """The VGG 16 Imagenet model"""
 
 
-    def __init__(self):
+    def __init__(self, weights_path=None):
         self.FILE_PATH = 'http://www.platform.ai/models/'
+        self.weights_path = weights_path
         self.create()
         self.get_classes()
 
@@ -82,8 +82,8 @@ class Vgg16():
         model.load_weights(get_file(fname, self.FILE_PATH+fname, cache_subdir='models'))
 
 
-    def get_batches(self, path, gen=image.ImageDataGenerator(), shuffle=True, batch_size=8, class_mode='categorical'):
-        return gen.flow_from_directory(path, target_size=(224,224),
+    def get_batches(self, path, gen=image.ImageDataGenerator(), img_size=(224,224), shuffle=True, batch_size=8, class_mode='categorical'):
+        return gen.flow_from_directory(path, target_size=img_size,
                 class_mode=class_mode, shuffle=shuffle, batch_size=batch_size)
 
 
@@ -94,17 +94,19 @@ class Vgg16():
         model.add(Dense(num, activation='softmax'))
         self.compile()
 
-    def finetune(self, batches):
+    def finetune(self, batches, reload=False):
         model = self.model
         model.pop()
         for layer in model.layers: layer.trainable=False
         model.add(Dense(batches.nb_class, activation='softmax'))
-        self.compile()
+        self.compile(reload=reload)
 
 
-    def compile(self, lr=0.001):
+    def compile(self, lr=0.001, reload=False):
         self.model.compile(optimizer=Adam(lr=lr),
                 loss='categorical_crossentropy', metrics=['accuracy'])
+        if reload:
+            self.model.load_weights(self.weights_path)
 
 
     def fit_data(self, trn, labels,  val, val_labels,  nb_epoch=1, batch_size=64):
@@ -112,9 +114,12 @@ class Vgg16():
                 validation_data=(val, val_labels), batch_size=batch_size)
 
 
-    def fit(self, batches, val_batches, nb_epoch=1):
+    def fit(self, batches, val_batches, nb_epoch=1, to_save=False):
         self.model.fit_generator(batches, samples_per_epoch=batches.nb_sample, nb_epoch=nb_epoch,
                 validation_data=val_batches, nb_val_samples=val_batches.nb_sample)
+        if to_save and self.weights_path:
+            self.model.save_weights(self.weights_path)
+
 
 
     def test(self, path, batch_size=8):
