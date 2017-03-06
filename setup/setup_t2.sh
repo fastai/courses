@@ -3,7 +3,7 @@
 # Configure a t2.xlarge instance
 
 # get the correct ami
-export region=`aws configure get region`
+export region=$(aws configure get region)
 if [ $region = "us-west-2" ]; then
    export ami="ami-f8fd5998" # Oregon
 elif [ $region = "eu-west-1" ]; then
