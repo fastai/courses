@@ -3,7 +3,7 @@
 # Configure a p2.xlarge instance
 
 # get the correct ami
-export region=`aws configure get region`
+export region=$(aws configure get region)
 if [ $region = "us-west-2" ]; then
    export ami="ami-bc508adc" # Oregon
 elif [ $region = "eu-west-1" ]; then
@@ -17,4 +17,4 @@ fi
 
 export instanceType="p2.xlarge"
 
-. $(dirname "$0")/setup_instance.sh
+# . $(dirname "$0")/setup_instance.sh
