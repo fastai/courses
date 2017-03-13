@@ -35,10 +35,6 @@ alias awsai-ssh='ssh -i ~/.ssh/aws-key-fast-ai.pem ubuntu@$instanceIp'
                                                                      
 # check the status (running, stopping, stopped) of the server
 # WARNING: describe-instance-status doesn't work (it returns empty if it's not running) use describe-instances with the query
-#alias awsai-status='export instanceStatus=`aws ec2 describe-instance-status --instance-ids $instanceId --filters "instance-state-name"` && echo $instanceStatus'
-# this command works in the console but has some problems in the 
-# aws ec2 describe-instances --instance-ids i-083038ae21434741d --query Reservations[].Instances[].State.Name --output text
-#alias awsai-status='export instanceStatus=`aws ec2 describe-instances --instance-ids $instanceId --query Reservations[0].Instances[0].State.Name && echo $instanceStatus`'
 #make it into a function because the variable keeps adding a string every time you invoke the function
 function awsai-status() {
 	echo "`aws ec2 describe-instances --instance-ids $instanceId --query Reservations[0].Instances[0].State.Name`"  
@@ -103,5 +99,5 @@ function awsai-help() {
 } 
 
 
-# done loading display the commands
+# done loading display the available commands
 awsai-help    
