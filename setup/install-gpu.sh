@@ -36,7 +36,7 @@ floatX = float32
 root = /usr/local/cuda" > ~/.theanorc
 
 # install and configure keras
-pip install keras
+pip install keras==1.2.2
 mkdir ~/.keras
 echo '{
     "image_dim_ordering": "th",
