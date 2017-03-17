@@ -55,9 +55,9 @@ np.set_printoptions(precision=4, linewidth=100)
 
 to_bw = np.array([0.299, 0.587, 0.114])
 def gray(img):
-    return np.rollaxis(img,0,3).dot(to_bw)
+    return np.rollaxis(img, 0, 1).dot(to_bw)
 def to_plot(img):
-    return np.rollaxis(img, 0, 3).astype(np.uint8)
+    return np.rollaxis(img, 0, 1).astype(np.uint8)
 def plot(img):
     plt.imshow(to_plot(img))
 
