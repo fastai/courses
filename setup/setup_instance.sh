@@ -37,7 +37,7 @@ aws ec2 create-tags --resources $internetGatewayId --tags --tags Key=Name,Value=
 aws ec2 attach-internet-gateway --internet-gateway-id $internetGatewayId --vpc-id $vpcId
 
 export subnetId=$(aws ec2 create-subnet --vpc-id $vpcId --cidr-block 10.0.0.0/28 --query 'Subnet.SubnetId' --output text)
-aws ec2 create-tags --resources $internetGatewayId --tags --tags Key=Name,Value=$name-subnet
+aws ec2 create-tags --resources $subnetId --tags --tags Key=Name,Value=$name-subnet
 
 export routeTableId=$(aws ec2 create-route-table --vpc-id $vpcId --query 'RouteTable.RouteTableId' --output text)
 aws ec2 create-tags --resources $routeTableId --tags --tags Key=Name,Value=$name-route-table
