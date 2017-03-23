@@ -54,10 +54,19 @@ np.set_printoptions(precision=4, linewidth=100)
 
 
 to_bw = np.array([0.299, 0.587, 0.114])
+
 def gray(img):
-    return np.rollaxis(img, 0, 1).dot(to_bw)
+    if K.image_data_format() == 'channels_last':
+        return np.rollaxis(img, 0, 1).dot(to_bw)
+    else:
+        return np.rollaxis(img, 0, 3).dot(to_bw)
+
 def to_plot(img):
-    return np.rollaxis(img, 0, 1).astype(np.uint8)
+    if K.image_data_format() == 'channels_last':
+        return np.rollaxis(img, 0, 1).astype(np.uint8)
+    else:
+        return np.rollaxis(img, 0, 3).astype(np.uint8)
+
 def plot(img):
     plt.imshow(to_plot(img))
 
