@@ -6,7 +6,6 @@ import numpy as np
 from scipy import misc, ndimage
 from scipy.ndimage.interpolation import zoom
 
-from keras.utils.data_utils import get_file
 from keras import backend as K
 from keras.layers.normalization import BatchNormalization
 from keras.utils.data_utils import get_file
@@ -69,7 +68,7 @@ class Vgg16BN():
             include_top=False
 
         model = self.model = Sequential()
-        model.add(Lambda(vgg_preprocess, input_shape=(3,)+size))
+        model.add(Lambda(vgg_preprocess, input_shape=(3,)+size, output_shape=(3,)+size))
 
         self.ConvBlock(2, 64)
         self.ConvBlock(2, 128)

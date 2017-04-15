@@ -54,10 +54,19 @@ np.set_printoptions(precision=4, linewidth=100)
 
 
 to_bw = np.array([0.299, 0.587, 0.114])
+
 def gray(img):
-    return np.rollaxis(img,0,3).dot(to_bw)
+    if K.image_dim_ordering() == 'tf':
+        return np.rollaxis(img, 0, 1).dot(to_bw)
+    else:
+        return np.rollaxis(img, 0, 3).dot(to_bw)
+
 def to_plot(img):
-    return np.rollaxis(img, 0, 3).astype(np.uint8)
+    if K.image_dim_ordering() == 'tf':
+        return np.rollaxis(img, 0, 1).astype(np.uint8)
+    else:
+        return np.rollaxis(img, 0, 3).astype(np.uint8)
+
 def plot(img):
     plt.imshow(to_plot(img))
 
@@ -75,8 +84,9 @@ def plots(ims, figsize=(12,6), rows=1, interp=False, titles=None):
     f = plt.figure(figsize=figsize)
     for i in range(len(ims)):
         sp = f.add_subplot(rows, len(ims)//rows, i+1)
+        sp.axis('Off')
         if titles is not None:
-            sp.set_title(titles[i], fontsize=18)
+            sp.set_title(titles[i], fontsize=16)
         plt.imshow(ims[i], interpolation=None if interp else 'none')
 
 
@@ -242,8 +252,8 @@ class MixIterator(object):
     def next(self, *args, **kwargs):
         if self.multi:
             nexts = [[next(it) for it in o] for o in self.iters]
-            n0s = np.concatenate([n[0] for n in o])
-            n1s = np.concatenate([n[1] for n in o])
+            n0 = np.concatenate([n[0] for n in nexts])
+            n1 = np.concatenate([n[1] for n in nexts])
             return (n0, n1)
         else:
             nexts = [next(it) for it in self.iters]
