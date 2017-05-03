@@ -9,7 +9,7 @@
 # And it also configures Jupyter to use the created cerficates.
 #
 # NOTE: Your Jupyter notebook will be listening port number 8888.
-#       This is also will be configured by this script.
+#       This will also be configured by this script.
 #
 
 # Code adapted from https://gist.githubusercontent.com/rashmibanthia/5a1e4d7e313d6832f2ff/raw/1f32274758851a32444491500fef4852496596ce/jupyter_notebook_ec2.sh
