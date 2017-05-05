@@ -4,7 +4,7 @@ alias aws-start='aws ec2 start-instances --instance-ids $instanceId && aws ec2 w
 alias aws-ip='export instanceIp=`aws ec2 describe-instances --filters "Name=instance-id,Values=$instanceId" --query "Reservations[0].Instances[0].PublicIpAddress"` && echo $instanceIp'
 alias aws-ssh='ssh -i ~/.ssh/aws-key-fast-ai.pem ubuntu@$instanceIp'
 alias aws-stop='aws ec2 stop-instances --instance-ids $instanceId'
-alias aws-state='aws ec2 describe-instances --instance-ids $instanceId --query "Reservations[0].Instances[0].State.Name"
+alias aws-state='aws ec2 describe-instances --instance-ids $instanceId --query "Reservations[0].Instances[0].State.Name"'
 
 
 if [[ `uname` == *"CYGWIN"* ]]
