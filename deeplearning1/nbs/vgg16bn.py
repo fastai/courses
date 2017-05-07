@@ -28,7 +28,7 @@ class Vgg16BN():
 
 
     def __init__(self, size=(224,224), include_top=True):
-        self.FILE_PATH = 'http://www.platform.ai/models/'
+        self.FILE_PATH = 'http://files.fast.ai/models/'
         self.create(size, include_top)
         self.get_classes()
 
