@@ -33,7 +33,7 @@ echo '{
     "backend": "theano"
 }' > ~/.keras/keras.json
 
-wget http://platform.ai/files/cudnn.tgz
+wget http://files.fast.ai/files/cudnn.tgz
 tar -zxf cudnn.tgz
 cd cuda
 sudo cp lib64/* /usr/local/cuda/lib64/
