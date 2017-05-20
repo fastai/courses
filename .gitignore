@@ -2,9 +2,17 @@ _site/
 .sass-cache/
 .jekyll-metadata
 .ipynb_checkpoints/
-data/
+# data/
 *.pyc
 *.h5
+*.jpg
+*.blp
 ai_aliases.sh
 fast-ai-commands.txt
 fast-ai-remove.sh
+deeplearning1/nbs/data/*
+deeplearning1/nbs/data/kag_dogscats/*
+deeplearning1/nbs/data/kag_dogscats/train/*
+deeplearning1/nbs/data/kag_dogscats/valid/*
+deeplearning1/nbs/data/kag_dogscats/test/*
+*/data/*
