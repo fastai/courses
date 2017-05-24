@@ -13,7 +13,7 @@ from keras.models import Sequential
 from keras.layers.core import Flatten, Dense, Dropout, Lambda
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
 from keras.layers.pooling import GlobalAveragePooling2D
-from keras.optimizers import SGD, RMSprop, Adam
+from keras.optimizers import SGD, Adam
 from keras.preprocessing import image
 
 
