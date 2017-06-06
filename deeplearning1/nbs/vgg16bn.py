@@ -16,6 +16,9 @@ from keras.layers.pooling import GlobalAveragePooling2D
 from keras.optimizers import SGD, Adam
 from keras.preprocessing import image
 
+# In case we are going to use the TensorFlow backend we need to explicitly set the Theano image ordering
+from keras import backend as K
+K.set_image_dim_ordering('th')
 
 vgg_mean = np.array([123.68, 116.779, 103.939], dtype=np.float32).reshape((3,1,1))
 def vgg_preprocess(x):
