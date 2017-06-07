@@ -12,10 +12,13 @@
 ### AWS
 If you haven't already, view the video at http://course.fast.ai/lessons/aws.html for the steps you need to complete before running these scripts. More information is available on the [wiki](http://wiki.fast.ai/index.php/AWS_install).
 1. Decide if you will use a GPU server or a standard server. GPU servers process deep learning jobs faster than general purpose servers, but they cost more per hour. Compare server pricing at https://aws.amazon.com/ec2/pricing/on-demand/.
-2. Download `setup_p2.sh` if you decided on the GPU server or `setup_t2.sh` for the general purpose server. Download `setup_instance.sh`.
-3. Run the command `bash setup_p2.sh` or `bash setup_t2.sh`. Run the command locally from the folder where the files were downloaded. Running `bash setup_p2.sh` sets up a p2.xlarge GPU server. `bash setup_p2.sh` sets up a t2.xlarge general purpose server.
-4. The script will set up the server you selected along with other required pieces of AWS infrastructure. When it finishes, it will provide the command for connecting to the new server. The server is preloaded with the software required for the course.
+2. Download `setup_p2.sh` if you decided on the GPU server or `setup_t2.sh` for the general purpose server. Also download `setup_instance.sh`.
+3. Run the command `bash setup_p2.sh` or `bash setup_t2.sh`, depending on the file you downloaded. Run the command locally from the folder where the files were downloaded. Running `bash setup_p2.sh` sets up a p2.xlarge GPU server. `bash setup_p2.sh` sets up a t2.xlarge general purpose server.
+4. The script will set up the server you selected along with other pieces of AWS infrastructure. When it finishes, it will print out the command for connecting to the new server. The server is preloaded with the software required for the course.
 5. Learn how to use the provided AWS aliases on the [wiki](http://wiki.fast.ai/index.php/AWS_install#Once_you_create_an_instance).
 
 ### Azure
-Run the `install-gpu-azure.sh` script after connecting to the Azure server once you have an Azure GPU server set up. More instructions available on the [wiki](http://wiki.fast.ai/index.php/Azure_install).
+Once you have an Azure GPU server set up, download and run the `install-gpu-azure.sh` script on that server. More instructions available on the [wiki](http://wiki.fast.ai/index.php/Azure_install).
+
+### Ubuntu
+Download and run the `install-gpu.sh` script to install required software on an Ubuntu machine. More instructions available on the [wiki](http://wiki.fast.ai/index.php/Ubuntu_installation).
