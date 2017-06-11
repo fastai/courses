@@ -78,13 +78,14 @@ class Vgg16BN():
         self.ConvBlock(3, 256)
         self.ConvBlock(3, 512)
         self.ConvBlock(3, 512)
+        model.add(Flatten())
 
         if not include_top:
             fname = 'vgg16_bn_conv.h5'
             model.load_weights(get_file(fname, self.FILE_PATH+fname, cache_subdir='models'))
             return
 
-        model.add(Flatten())
+        
         self.FCBlock()
         self.FCBlock()
         model.add(Dense(1000, activation='softmax'))
