@@ -28,6 +28,7 @@ def vgg_preprocess(x):
 
 class Vgg16BN():
     """The VGG 16 Imagenet model with Batch Normalization for the Dense Layers"""
+    include_top = None
 
 
     def __init__(self, size=(224,224), include_top=True):
@@ -79,6 +80,8 @@ class Vgg16BN():
         self.ConvBlock(3, 512)
         self.ConvBlock(3, 512)
         model.add(Flatten())
+        
+        self.include_top = include_top
 
         if not include_top:
             fname = 'vgg16_bn_conv.h5'
@@ -101,7 +104,9 @@ class Vgg16BN():
 
     def ft(self, num):
         model = self.model
-        model.pop()
+        # only pop out the last layer if top included
+        if self.include_top:
+            model.pop()
         for layer in model.layers: layer.trainable=False
         model.add(Dense(num, activation='softmax'))
         self.compile()
