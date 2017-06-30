@@ -1,0 +1,16 @@
+
+# Directories to ignore when uploading code to floyd
+# Do not add a trailing slash for directories
+
+.git
+.eggs
+eggs
+lib
+lib64
+parts
+sdist
+var
+/nbs/data/test/**/*.*
+/nbs/data/train/**/*.*
+/nbs/data/valid/**/*.*
+/nbs/data/dogscats/**/*.*
