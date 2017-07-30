@@ -1,1 +1,3 @@
-# part2
+# Part 2: Cutting Edge Deep Learning for Coders
+
+This is the repo for [course.fast.ai/part2.html](Cutting Edge Deep Learning for Coders). See the course page for details on these notebooks and the associated videos.
