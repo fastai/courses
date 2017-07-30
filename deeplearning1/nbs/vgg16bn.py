@@ -13,9 +13,12 @@ from keras.models import Sequential
 from keras.layers.core import Flatten, Dense, Dropout, Lambda
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
 from keras.layers.pooling import GlobalAveragePooling2D
-from keras.optimizers import SGD, RMSprop, Adam
+from keras.optimizers import SGD, Adam
 from keras.preprocessing import image
 
+# In case we are going to use the TensorFlow backend we need to explicitly set the Theano image ordering
+from keras import backend as K
+K.set_image_dim_ordering('th')
 
 vgg_mean = np.array([123.68, 116.779, 103.939], dtype=np.float32).reshape((3,1,1))
 def vgg_preprocess(x):
@@ -28,7 +31,7 @@ class Vgg16BN():
 
 
     def __init__(self, size=(224,224), include_top=True):
-        self.FILE_PATH = 'http://www.platform.ai/models/'
+        self.FILE_PATH = 'http://files.fast.ai/models/'
         self.create(size, include_top)
         self.get_classes()
 
@@ -103,11 +106,12 @@ class Vgg16BN():
         self.compile()
 
     def finetune(self, batches):
-        model = self.model
-        model.pop()
-        for layer in model.layers: layer.trainable=False
-        model.add(Dense(batches.nb_class, activation='softmax'))
-        self.compile()
+        self.ft(batches.nb_class)
+
+        classes = list(iter(batches.class_indices))
+        for c in batches.class_indices:
+            classes[batches.class_indices[c]] = c
+        self.classes = classes
 
 
     def compile(self, lr=0.001):
