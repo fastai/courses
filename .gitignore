@@ -8,3 +8,4 @@ data/
 ai_aliases.sh
 fast-ai-commands.txt
 fast-ai-remove.sh
+.DS_Store
