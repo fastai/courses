@@ -3,6 +3,10 @@ python: 2.7
 dist: trusty
 sudo: false
 
+env:
+  global:
+    - NBCONVERT_ARGS="--to html --execute --ExecutePreprocessor.kernel_name=python --ExecutePreprocessor.timeout=-1"
+
 install:
   # xvfb
   # https://docs.travis-ci.com/user/gui-and-headless-browsers/
@@ -32,7 +36,8 @@ script:
     curl -sSLO "http://files.fast.ai/data/dogscats.zip" &&
     unzip -qq -d deeplearning1/nbs/data dogscats.zip;
     fi
-  - jupyter nbconvert --to html --execute deeplearning1/nbs/lesson1.ipynb --ExecutePreprocessor.kernel_name=python --ExecutePreprocessor.timeout=-1
+  - travis_wait jupyter nbconvert deeplearning1/nbs/lesson1.ipynb $NBCONVERT_ARGS
+  - travis_wait jupyter nbconvert deeplearning1/nbs/lesson2.ipynb $NBCONVERT_ARGS
 
 before_cache:
   # We only cache the archives but not the extracted packages,
