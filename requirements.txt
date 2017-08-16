@@ -1,0 +1,10 @@
+jupyter
+matplotlib
+pillow
+keras==1.2.2
+theano
+tensorflow
+pandas
+scikit-learn
+bcolz
+sympy

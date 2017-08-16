@@ -1,0 +1,51 @@
+language: python
+python: 2.7
+dist: trusty
+sudo: false
+
+env:
+  global:
+    - NBCONVERT_ARGS="--to html --execute --ExecutePreprocessor.kernel_name=python --ExecutePreprocessor.timeout=-1"
+
+install:
+  # xvfb
+  # https://docs.travis-ci.com/user/gui-and-headless-browsers/
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  # install conda
+  # https://conda.io/docs/travis.html
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -f -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda config --add channels conda-forge
+  - conda info -a
+  - conda create -q --name fastai --file requirements.txt python=$TRAVIS_PYTHON_VERSION
+  - source activate fastai
+  - conda list
+
+script:
+  - mkdir -p deeplearning1/nbs/data
+  - if [ ! -d deeplearning1/nbs/data/dogscats ]; then
+    curl -sSLO "http://files.fast.ai/data/dogscats.zip" &&
+    unzip -qq -d deeplearning1/nbs/data dogscats.zip;
+    fi
+  - travis_wait jupyter nbconvert deeplearning1/nbs/lesson1.ipynb $NBCONVERT_ARGS
+  - travis_wait jupyter nbconvert deeplearning1/nbs/lesson2.ipynb $NBCONVERT_ARGS
+
+before_cache:
+  # We only cache the archives but not the extracted packages,
+  # such that the miniconda installer script can extract correctly.
+  - rm -rf $HOME/miniconda/pkgs/*/
+cache:
+  timeout: 1000
+  directories:
+    - $HOME/miniconda/pkgs
+    - $HOME/.keras/models
+    - deeplearning1/nbs/data
