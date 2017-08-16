@@ -84,7 +84,7 @@ def load_glove(loc):
 def plot_multi(im, dim=(4,4), figsize=(6,6), **kwargs ):
     plt.figure(figsize=figsize)
     for i,img in enumerate(im):
-        plt.subplot(*dim, i+1)
+        plt.subplot(*((dim)+(i+1,)))
         plt.imshow(img, **kwargs)
         plt.axis('off')
     plt.tight_layout()
