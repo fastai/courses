@@ -164,7 +164,7 @@ class Vgg16():
         model.pop()
         for layer in model.layers: layer.trainable=False
         model.add(Dense(num, activation='softmax'))
-        self.compile()
+        model.compile()
 
     def finetune(self, batches):
         """
