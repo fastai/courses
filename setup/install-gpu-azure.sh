@@ -5,7 +5,7 @@ sudo apt-get --assume-yes install software-properties-common
 wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.44-1_amd64.deb
 sudo dpkg -i cuda-repo-ubuntu1604_8.0.44-1_amd64.deb
 sudo apt-get update
-sudo apt-get -y install cuda
+sudo apt-get -y install cuda-8-0
 # If you get an error like "could not insert 'nvidia_367': No such device" for the following command, restart the VM using command : sudo shutdown -r now
 sudo modprobe nvidia
 nvidia-smi
