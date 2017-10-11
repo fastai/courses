@@ -1,5 +1,7 @@
 # This script is designed to work with ubuntu 16.04 LTS
 
+set -e
+
 # ensure system is updated and has basic build tools
 sudo apt-get update
 sudo apt-get --assume-yes upgrade

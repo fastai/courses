@@ -2,6 +2,8 @@
 #
 # Configure a p2.xlarge instance
 
+set -e
+
 # get the correct ami
 export region=$(aws configure get region)
 if [ $region = "us-west-2" ]; then
