@@ -11,7 +11,7 @@ wget "http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/
 
 sudo dpkg -i cuda-repo-ubuntu1604_8.0.44-1_amd64.deb
 sudo apt-get update
-sudo apt-get -y install cuda
+sudo apt-get -y install cuda-8-0
 sudo modprobe nvidia
 nvidia-smi
 
