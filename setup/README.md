@@ -22,3 +22,6 @@ Once you have an Azure GPU server set up, download and run the `install-gpu-azur
 
 ### Ubuntu
 Download and run the `install-gpu.sh` script to install required software on an Ubuntu machine. More instructions available on the [wiki](http://wiki.fast.ai/index.php/Ubuntu_installation).
+
+### Anaconda Environment
+If you have Anaconda installed and want to keep a separate environment for the class withthe proper version of the packages so that you can easily install (ubuntu) you can use the `environment.yml` file to quickly create a conda environment. Simply run `conda env create -n <env-name> -f environment.yml` and then run `source activate <env-name>` (`activate <env-name>` on windows) to activate the environment  
