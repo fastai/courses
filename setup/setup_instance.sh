@@ -27,28 +27,63 @@ if [ -z "$(aws configure get aws_access_key_id)" ]; then
     exit 1
 fi
 
-export vpcId=$(aws ec2 create-vpc --cidr-block 10.0.0.0/28 --query 'Vpc.VpcId' --output text)
-aws ec2 create-tags --resources $vpcId --tags --tags Key=Name,Value=$name
-aws ec2 modify-vpc-attribute --vpc-id $vpcId --enable-dns-support "{\"Value\":true}"
-aws ec2 modify-vpc-attribute --vpc-id $vpcId --enable-dns-hostnames "{\"Value\":true}"
+export vpcId="$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="$name" | head -n 1 | cut -f7)"
+if [ -z "${vpcId}" ]
+then
+  echo "Fast.ai virtual private cloud does not exist. Creating one..."
+  export vpcId=$(aws ec2 create-vpc --cidr-block 10.0.0.0/28 --query 'Vpc.VpcId' --output text)
+  aws ec2 create-tags --resources $vpcId --tags --tags Key=Name,Value=$name
+  aws ec2 modify-vpc-attribute --vpc-id $vpcId --enable-dns-support "{\"Value\":true}"
+  aws ec2 modify-vpc-attribute --vpc-id $vpcId --enable-dns-hostnames "{\"Value\":true}"
+else
+  echo "Fast.ai virtual private cloud already exists. Skipping..."
+fi
 
-export internetGatewayId=$(aws ec2 create-internet-gateway --query 'InternetGateway.InternetGatewayId' --output text)
-aws ec2 create-tags --resources $internetGatewayId --tags --tags Key=Name,Value=$name-gateway
-aws ec2 attach-internet-gateway --internet-gateway-id $internetGatewayId --vpc-id $vpcId
+export internetGatewayId="$(aws ec2 describe-internet-gateways --filter Name=tag:Name,Values="$name"-gateway | head -n 1 | cut -f2)"
+if [ -z "${internetGatewayId}" ]
+then
+  echo "Fast.ai Internet Gateway does not exist. Creting one..."
+  export internetGatewayId=$(aws ec2 create-internet-gateway --query 'InternetGateway.InternetGatewayId' --output text)
+  aws ec2 create-tags --resources $internetGatewayId --tags --tags Key=Name,Value=$name-gateway
+  aws ec2 attach-internet-gateway --internet-gateway-id $internetGatewayId --vpc-id $vpcId
+else
+  echo "Fast.ai Internet Gateway already exists. Skipping..."
+fi
 
-export subnetId=$(aws ec2 create-subnet --vpc-id $vpcId --cidr-block 10.0.0.0/28 --query 'Subnet.SubnetId' --output text)
-aws ec2 create-tags --resources $subnetId --tags --tags Key=Name,Value=$name-subnet
+export subnetId="$(aws ec2 describe-subnets --filter Name=tag:Name,Values="$name"-subnet | head -n 1 | cut -f9)"
+if [ -z "${subnetId}" ]
+then
+  echo "Fast.ai subnet does not exist. Creating one..."
+  export subnetId=$(aws ec2 create-subnet --vpc-id $vpcId --cidr-block 10.0.0.0/28 --query 'Subnet.SubnetId' --output text)
+  aws ec2 create-tags --resources $subnetId --tags --tags Key=Name,Value=$name-subnet
+else
+  echo "Fast.ai subnet already exists. Skipping..."
+fi
 
-export routeTableId=$(aws ec2 create-route-table --vpc-id $vpcId --query 'RouteTable.RouteTableId' --output text)
-aws ec2 create-tags --resources $routeTableId --tags --tags Key=Name,Value=$name-route-table
-export routeTableAssoc=$(aws ec2 associate-route-table --route-table-id $routeTableId --subnet-id $subnetId --output text)
-aws ec2 create-route --route-table-id $routeTableId --destination-cidr-block 0.0.0.0/0 --gateway-id $internetGatewayId
+export routeTableId="$(aws ec2 describe-route-tables --filter Name=tag:Name,Values="$name"-route-table | head -n 1 | cut -f2)"
+if [ -z "${routeTableId}" ]
+then
+  echo "Fast.ai route table does not exist. Creating one..."
+  export routeTableId=$(aws ec2 create-route-table --vpc-id $vpcId --query 'RouteTable.RouteTableId' --output text)
+  aws ec2 create-tags --resources $routeTableId --tags --tags Key=Name,Value=$name-route-table
+  export routeTableAssoc=$(aws ec2 associate-route-table --route-table-id $routeTableId --subnet-id $subnetId --output text)
+  aws ec2 create-route --route-table-id $routeTableId --destination-cidr-block 0.0.0.0/0 --gateway-id $internetGatewayId
+else
+  echo "Fast.ai route table already exists. Skipping..."
+fi
 
-export securityGroupId=$(aws ec2 create-security-group --group-name $name-security-group --description "SG for fast.ai machine" --vpc-id $vpcId --query 'GroupId' --output text)
-# ssh
-aws ec2 authorize-security-group-ingress --group-id $securityGroupId --protocol tcp --port 22 --cidr $cidr
-# jupyter notebook
-aws ec2 authorize-security-group-ingress --group-id $securityGroupId --protocol tcp --port 8888-8898 --cidr $cidr
+export securityGroupId="$(aws ec2 describe-security-groups --filters Name=vpc-id,Values=vpc-32b59e54 Name=group-name,Values="$name"-security-group | head -n 1 | cut -f3)"
+if [ -z "${securityGroupId}" ]
+then
+  echo "Fast.ai security group does not exist. Creating one..."
+  export securityGroupId=$(aws ec2 create-security-group --group-name $name-security-group --description "SG for fast.ai machine" --vpc-id $vpcId --query 'GroupId' --output text)
+  # ssh
+  aws ec2 authorize-security-group-ingress --group-id $securityGroupId --protocol tcp --port 22 --cidr $cidr
+  # jupyter notebook
+  aws ec2 authorize-security-group-ingress --group-id $securityGroupId --protocol tcp --port 8888-8898 --cidr $cidr
+else
+  echo "Fast.ai security group already exists. Skipping..."
+fi
 
 if [ ! -d ~/.ssh ]
 then
@@ -62,8 +97,10 @@ then
 fi
 
 export instanceId=$(aws ec2 run-instances --image-id $ami --count 1 --instance-type $instanceType --key-name aws-key-$name --security-group-ids $securityGroupId --subnet-id $subnetId --associate-public-ip-address --block-device-mapping "[ { \"DeviceName\": \"/dev/sda1\", \"Ebs\": { \"VolumeSize\": 128, \"VolumeType\": \"gp2\" } } ]" --query 'Instances[0].InstanceId' --output text)
+echo "Instance ID: ${instanceId}"
 aws ec2 create-tags --resources $instanceId --tags --tags Key=Name,Value=$name-gpu-machine
 export allocAddr=$(aws ec2 allocate-address --domain vpc --query 'AllocationId' --output text)
+echo "Don't forget to release your allocated addresses https://<region>.console.aws.amazon.com/vpc and Elastic IPs if you want to terminate your EC2 instance, but still want to use all what was set in this script."
 
 echo Waiting for instance start...
 aws ec2 wait instance-running --instance-ids $instanceId
