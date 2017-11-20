@@ -27,8 +27,8 @@ if [ -z "$(aws configure get aws_access_key_id)" ]; then
     exit 1
 fi
 
-export vpcId="$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="$name" | head -n 1 | cut -f7)"
-if [ -z "${vpcId}" ]
+export vpcId="$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="$name" --query "Vpcs[0].VpcId")"
+if [ "${vpcId}" == "None" ]
 then
   echo "Fast.ai virtual private cloud does not exist. Creating one..."
   export vpcId=$(aws ec2 create-vpc --cidr-block 10.0.0.0/28 --query 'Vpc.VpcId' --output text)
@@ -39,8 +39,8 @@ else
   echo "Fast.ai virtual private cloud already exists. Skipping..."
 fi
 
-export internetGatewayId="$(aws ec2 describe-internet-gateways --filter Name=tag:Name,Values="$name"-gateway | head -n 1 | cut -f2)"
-if [ -z "${internetGatewayId}" ]
+export internetGatewayId="$(aws ec2 describe-internet-gateways --filter Name=tag:Name,Values="$name"-gateway --query "InternetGateways[0].InternetGatewayId")"
+if [ "${internetGatewayId}" == "None" ]
 then
   echo "Fast.ai Internet Gateway does not exist. Creting one..."
   export internetGatewayId=$(aws ec2 create-internet-gateway --query 'InternetGateway.InternetGatewayId' --output text)
@@ -50,8 +50,8 @@ else
   echo "Fast.ai Internet Gateway already exists. Skipping..."
 fi
 
-export subnetId="$(aws ec2 describe-subnets --filter Name=tag:Name,Values="$name"-subnet | head -n 1 | cut -f9)"
-if [ -z "${subnetId}" ]
+export subnetId="$(aws ec2 describe-subnets --filter Name=tag:Name,Values="$name"-subnet --query "Subnets[0].SubnetId")"
+if [ "${subnetId}" == "None" ]
 then
   echo "Fast.ai subnet does not exist. Creating one..."
   export subnetId=$(aws ec2 create-subnet --vpc-id $vpcId --cidr-block 10.0.0.0/28 --query 'Subnet.SubnetId' --output text)
@@ -60,8 +60,8 @@ else
   echo "Fast.ai subnet already exists. Skipping..."
 fi
 
-export routeTableId="$(aws ec2 describe-route-tables --filter Name=tag:Name,Values="$name"-route-table | head -n 1 | cut -f2)"
-if [ -z "${routeTableId}" ]
+export routeTableId="$(aws ec2 describe-route-tables --filter Name=tag:Name,Values="$name"-route-table --query "RouteTables[0].RouteTableId")"
+if [ "${routeTableId}" == "None" ]
 then
   echo "Fast.ai route table does not exist. Creating one..."
   export routeTableId=$(aws ec2 create-route-table --vpc-id $vpcId --query 'RouteTable.RouteTableId' --output text)
@@ -72,8 +72,8 @@ else
   echo "Fast.ai route table already exists. Skipping..."
 fi
 
-export securityGroupId="$(aws ec2 describe-security-groups --filters Name=vpc-id,Values=vpc-32b59e54 Name=group-name,Values="$name"-security-group | head -n 1 | cut -f3)"
-if [ -z "${securityGroupId}" ]
+export securityGroupId="$(aws ec2 describe-security-groups --filters Name=vpc-id,Values="$vpcId" Name=group-name,Values="$name"-security-group --query "SecurityGroups[0].GroupId")"
+if [ "${securityGroupId}" == "None" ]
 then
   echo "Fast.ai security group does not exist. Creating one..."
   export securityGroupId=$(aws ec2 create-security-group --group-name $name-security-group --description "SG for fast.ai machine" --vpc-id $vpcId --query 'GroupId' --output text)
