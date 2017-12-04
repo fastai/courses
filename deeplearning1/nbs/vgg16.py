@@ -183,6 +183,8 @@ class Vgg16():
         # sort the class labels by index according to batches.class_indices and update model.classes
         for c in batches.class_indices:
             classes[batches.class_indices[c]] = c
+	
+	print(classes)
         self.classes = classes
 
 
