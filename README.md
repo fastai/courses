@@ -1,4 +1,5 @@
 # My Setup
+
 To run locally (ie instead of on AWS) create a conda environment and activate the environment (skip all the steps in the setup/ folder)
 Then install /path-to-env/bin/pip install -r requirements.txt
 Also run `conda install h5py`
