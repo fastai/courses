@@ -27,6 +27,8 @@ conda install -y bcolz
 conda upgrade -y --all
 
 # install and configure theano
+
+conda install mkl=2017
 pip install theano
 echo "[global]
 device = gpu
@@ -34,6 +36,8 @@ floatX = float32
 
 [cuda]
 root = /usr/local/cuda" > ~/.theanorc
+
+echo "export THEANO_FLAGS=mode=FAST_RUN,device=cuda,floatX=float32" >> ~/.bashrc
 
 # install and configure keras
 pip install keras==1.2.2
