@@ -73,7 +73,7 @@ ssl_verify: False" >> ~/.condarc
 fi
 
 # install and configure theano
-pip install theano --user
+pip install theano
 echo "[global]
 device = gpu
 floatX = float32
@@ -82,7 +82,7 @@ floatX = float32
 root = /usr/local/cuda" > ~/.theanorc
 
 # install and configure keras
-pip install keras==1.2.2 --user
+pip install keras==1.2.2
 
 if [ ! -d ${hKeras} ];
 then
