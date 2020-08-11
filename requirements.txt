@@ -8,3 +8,4 @@ pandas
 scikit-learn
 bcolz
 sympy
+h5py
