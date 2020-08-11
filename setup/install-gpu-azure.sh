@@ -5,7 +5,7 @@ sudo apt-get --assume-yes install software-properties-common
 wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_8.0.44-1_amd64.deb
 sudo dpkg -i cuda-repo-ubuntu1604_8.0.44-1_amd64.deb
 sudo apt-get update
-sudo apt-get -y install cuda
+sudo apt-get -y install cuda-8-0
 # If you get an error like "could not insert 'nvidia_367': No such device" for the following command, restart the VM using command : sudo shutdown -r now
 sudo modprobe nvidia
 nvidia-smi
@@ -18,8 +18,9 @@ echo 'export PATH="/usr/local/cuda/bin:$HOME/anaconda2/bin:$PATH"' >> ~/.bashrc
 export PATH="/usr/local/cuda/bin:$HOME/anaconda2/bin:$PATH"
 conda install -y bcolz
 conda upgrade -y --all
+conda install mkl=2017.0.3
+conda install Theano pygpu
 
-pip install theano
 echo "[global]
 device = gpu
 floatX = float32" > ~/.theanorc
@@ -33,8 +34,8 @@ echo '{
     "backend": "theano"
 }' > ~/.keras/keras.json
 
-wget http://files.fast.ai/files/cudnn.tgz
-tar -zxf cudnn.tgz
+wget http://files.fast.ai/files/cudnn-8.0-linux-x64-v6.0.tgz
+tar -zxf cudnn-8.0-linux-x64-v6.0.tgz
 cd cuda
 sudo cp lib64/* /usr/local/cuda/lib64/
 sudo cp include/* /usr/local/cuda/include/
@@ -46,4 +47,6 @@ echo "c.NotebookApp.password = u'"$jupass"'" >> .jupyter/jupyter_notebook_config
 echo "c.NotebookApp.ip = '*'
 c.NotebookApp.open_browser = False" >> .jupyter/jupyter_notebook_config.py
 mkdir nbs
+
+
 
