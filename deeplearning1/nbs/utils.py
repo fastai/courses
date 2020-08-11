@@ -102,7 +102,7 @@ def get_batches(dirname, gen=image.ImageDataGenerator(), shuffle=True, batch_siz
             class_mode=class_mode, shuffle=shuffle, batch_size=batch_size)
 
 
-def onehot(x):
+def encode_onehot(x):
     return to_categorical(x)
 
 
@@ -224,8 +224,8 @@ def get_classes(path):
     batches = get_batches(path+'train', shuffle=False, batch_size=1)
     val_batches = get_batches(path+'valid', shuffle=False, batch_size=1)
     test_batches = get_batches(path+'test', shuffle=False, batch_size=1)
-    return (val_batches.classes, batches.classes, onehot(val_batches.classes), onehot(batches.classes),
-        val_batches.filenames, batches.filenames, test_batches.filenames)
+    return (val_batches.classes, batches.classes, encode_onehot(val_batches.classes), encode_onehot(batches.classes),
+            val_batches.filenames, batches.filenames, test_batches.filenames)
 
 
 def split_at(model, layer_type):
