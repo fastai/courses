@@ -19,7 +19,7 @@ from tensorflow.python.framework import ops
 #from tensorflow.contrib import rnn, legacy_seq2seq as seq2seq
 
 from keras_tqdm import TQDMNotebookCallback
-from keras import initializations
+from keras import initializers
 from keras.applications.resnet50 import ResNet50, decode_predictions, conv_block, identity_block
 from keras.applications.vgg16 import VGG16
 from keras.preprocessing import image
