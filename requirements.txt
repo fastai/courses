@@ -1,7 +1,7 @@
 jupyter
 matplotlib
 pillow
-keras==1.2.2
+keras==2.13.1
 theano
 tensorflow
 pandas
